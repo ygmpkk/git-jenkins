@@ -1,0 +1,49 @@
+#!/bin/bash
+# 集成到Git子命令
+# Timothy<ygmpkk@gmail.com>
+
+PWD=`dirname $0`
+command=$1
+
+# Jenkins 配置信息
+# 从git config加载
+test -z ${JENKINS_URL} && export JENKINS_URL=$(git config jenkins.url)
+test -z ${JENKINS_TOKEN} && export JENKINS_TOKEN=$(git config jenkins.token)
+test -z ${JENKINS_LOGIN} && export JENKINS_LOGIN=$(git config jenkins.login)
+
+# echo "Jenkins info"
+# echo ${JENKINS_URL}
+# echo ${JENKINS_TOKEN}
+# echo ${JENKINS_LOGIN}
+
+function help {
+    echo "usage: git jenkins <subcommand>"
+    echo
+    echo "Available subcommands are:"
+    echo -e "   list\t\t\tList jenkins jobs"
+    echo -e "   build <project>\tBuild a jenkins job"
+    echo -e "   log <project>\tGet a jenkins job log"
+    echo
+    exit 1;
+}
+
+function jenk {
+    $PWD/jenkins-cli $1 $2
+}
+
+if ! test -z $2; then
+    if [[ $command = "build" ]]; then
+        echo "Jenkins build for" $2
+        jenk build $2
+    elif [[ $command = "log" ]]; then
+        echo "Jenkins log for" $2
+        jenk log $2
+    else
+        help
+    fi
+elif [[ $command = "list" ]]; then
+    echo "Jenkins list"
+    jenk list
+else
+    help
+fi
