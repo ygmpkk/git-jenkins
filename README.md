@@ -4,6 +4,21 @@ Jenkins的git命令
 
 适合开发者日常构建
 
+## 安装升级
+
+安装
+
+```
+brew install https://raw.githubusercontent.com/ygmpkk/git-jenkins/master/git-jenkins.rb
+```
+
+升级
+
+```
+brew uninstall git-jenkins
+brew install https://raw.githubusercontent.com/ygmpkk/git-jenkins/master/git-jenkins.rb
+```
+
 ## 参数设置
 
 支持从环境变量和git config读取配置
