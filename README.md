@@ -92,3 +92,80 @@ sh pkg.sh $GIT_BRANCH $VERSION.$BUILD_ID
   <buildWrappers/>
 </project>
 ```
+
+## 演示步骤
+
+```
+> git config jenkins.url http://jenkins:8080
+
+> git jenkins credentials
+
+TITLE:
+Global credentials (unrestricted)
+
+DESCRIPTION:
+Credentials that should be available irrespective of domain specification to requirements matching.
+
+NAME                          KEY
+jenkins                       xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+> git jenkins generate > config.xml
+> cat config.xml
+
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>git@github.com:ygmpkk/git-jenkins.git</url>
+        <credentialsId>YOUR GIT REMOTE CREDENTIALS</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>
+        YOUR SHELL COMMAND
+      </command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
+
+> Youu should replace YOUR GIT REMOTE CREDENTIALS and YOUR SHELL COMMAND
+
+> git jenkins create test config.xml
+
+Jenkins: Create job test
+SUCCESS
+
+> git jenkins list
+
+JOBS:
+NAME                       STATUS
+test                       NOTBUILT
+
+VIEWS:
+NAME         URL
+All          http://jenkins:8080/
+```
